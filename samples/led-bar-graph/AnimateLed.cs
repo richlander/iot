@@ -2,27 +2,67 @@ using System;
 using System.Devices.Gpio;
 using System.Threading;
 using System.Linq;
+using System.Collections.Generic;
 
 public class AnimateLed
 {
+    private static void CycleLeds(int litTime, int dimTime, GpioPin[] pins, params int[] leds)
+    {
+        // light time
+        foreach (var led in leds)
+        {
+            pins[led].Write(PinValue.High);
+        }
+        Thread.Sleep(litTime);
+
+        // light time
+        foreach (var led in leds)
+        {
+            pins[led].Write(PinValue.Low);
+        }
+        Thread.Sleep(dimTime);
+    }
+
+    public static IEnumerable<int> GetSequence(int start, int end)
+    {
+        if (start < end)
+        {
+            for (var i = start; i <= end; i++)
+            {
+                yield return i;
+            }
+        }
+        else if (start > end)
+        {
+            for (var i = start; i >= end; i--)
+            {
+                yield return i;
+            }
+        }
+        yield break;
+    }
+
+    public static void Sequence(int litTime, int dimTime, GpioPin[] pins, IEnumerable<int> leds)
+    {
+        foreach (var led in leds)
+        {
+            CycleLeds(litTime, dimTime, pins, led);
+        }
+    }
+
     public static void FrontToBack(int litTime, int dimTime, GpioPin[] pins, bool skipLast = false)
     {
         var iterations = pins.Length;
         if (skipLast)
         {
-            iterations = iterations-2;
+            iterations = iterations - 2;
         }
 
-        for (var i = 0 ; i < iterations; i++)
+        for (var i = 0; i < iterations; i++)
         {
-            var pin = pins[i];
-            pin.Write(PinValue.High);
-            Thread.Sleep(litTime);          
-            pin.Write(PinValue.Low);
-            Thread.Sleep(dimTime);
+            CycleLeds(litTime, dimTime, pins, i);
         }
     }
-
     public static void BacktoFront(int litTime, int dimTime, GpioPin[] pins, bool skipLast = false)
     {
         var reverseArray = pins.Reverse().ToArray();
@@ -33,32 +73,17 @@ public class AnimateLed
     {
         var half = pins.Length / 2;
 
-        Console.WriteLine($"half: {half}");
-
         if (pins.Length % 2 == 1)
         {
-            Console.WriteLine($"odd number; half {half}");
-            pins[half].Write(PinValue.High);
-            Thread.Sleep(litTime);
-            pins[half].Write(PinValue.Low);
-            Thread.Sleep(dimTime);
+            CycleLeds(litTime, dimTime, pins, half);
         }
 
-        // 5
         for (var i = 1; i < half+1; i ++)
         {
             var ledA= half - i;
             var ledB = half - 1 + i;
 
-            Console.WriteLine($"i: {i}; half: {half}");
-            // 4
-            pins[ledA].Write(PinValue.High);
-            // 5
-            pins[ledB].Write(PinValue.High);
-            Thread.Sleep(litTime);
-            pins[ledA].Write(PinValue.Low);
-            pins[ledB].Write(PinValue.Low);
-            Thread.Sleep(dimTime);
+            CycleLeds(litTime,dimTime,pins,ledA,ledB);
         }
     }
 
@@ -66,33 +91,46 @@ public class AnimateLed
     {
         var half = pins.Length / 2;
 
-        Console.WriteLine($"half: {half}");
-
-        // 5
         for (var i = 0; i < half ; i++)
         {
             var ledA = i;
             var ledB = pins.Length - 1 - i;
 
-            Console.WriteLine($"i: {i}; half: {half}");
-            // 4
-            pins[ledA].Write(PinValue.High);
-            // 5
-            pins[ledB].Write(PinValue.High);
-            Thread.Sleep(litTime);
-            pins[ledA].Write(PinValue.Low);
-            pins[ledB].Write(PinValue.Low);
-            Thread.Sleep(dimTime);
+            CycleLeds(litTime, dimTime, pins, ledA, ledB);
         }
 
         if (pins.Length % 2 == 1)
         {
-            Console.WriteLine($"odd number; half {half}");
-            pins[half].Write(PinValue.High);
-            Thread.Sleep(litTime);
-            pins[half].Write(PinValue.Low);
-            Thread.Sleep(dimTime);
+            CycleLeds(litTime, dimTime, pins, half);
         }
+    }
+
+    public static void LightAll(int litTime, int dimTime, GpioPin[] pins)
+    {
+        foreach(var pin in pins)
+        {
+            pin.Write(PinValue.High);
+        }
+        Thread.Sleep(litTime);
+    }
+
+    public static void DimAllAtRandom(int litTime, int dimTime, GpioPin[] pins)
+    {
+        var random = new Random();
+
+        var ledList = GetSequence(0, 9).ToList();
+
+        while (ledList.Count > 0)
+        {
+            var led = random.Next(pins.Length);
+
+            if (ledList.Remove(led))
+            {
+                pins[led].Write(PinValue.Low);
+                Thread.Sleep(dimTime);
+            }
+        }
+
     }
 
 }

@@ -15,10 +15,7 @@ namespace led_bar_graph
 
             var controller = new GpioController(PinNumberingScheme.Gpio);
 
-            foreach (var pin in pins)
-            {
-                controller.OpenPin(pin,PinMode.Output);
-            }
+            controller.OpenPins(PinMode.Output, pins);
 
             var pinArray = controller.OpenPins.ToArray();
             var litTime = 200;
@@ -28,10 +25,14 @@ namespace led_bar_graph
             {
                 AnimateLed.FrontToBack(litTime,dimTime,pinArray,true);
                 AnimateLed.BacktoFront(litTime, dimTime, pinArray);
+                AnimateLed.Sequence(litTime, dimTime, pinArray,AnimateLed.GetSequence(1,3));
                 AnimateLed.MidToEnd(litTime,dimTime,pinArray);
                 AnimateLed.EndToMid(litTime, dimTime, pinArray);
-                
-                if (litTime < 5)
+                AnimateLed.MidToEnd(litTime, dimTime, pinArray);
+                AnimateLed.LightAll(litTime,dimTime,pinArray);
+                AnimateLed.DimAllAtRandom(litTime, dimTime, pinArray);
+
+                if (litTime < 25)
                 {
                     litTime = 200;
                     dimTime = 100;
