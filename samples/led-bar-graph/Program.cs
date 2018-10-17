@@ -21,26 +21,37 @@ namespace led_bar_graph
             var litTime = 200;
             var dimTime = 50;
 
+            Console.CancelKeyPress += (object sender, ConsoleCancelEventArgs eventArgs) =>
+            {
+                foreach (var pin in pins)
+                {
+                    controller.ClosePin(pin);
+                }
+            };
+
+            Console.WriteLine($"Animate! {pins.Length} pins in use.");
+
             while (true)
             {
+                Console.WriteLine($"Lit: {litTime}ms; Dim: {dimTime}");
                 AnimateLed.FrontToBack(litTime,dimTime,pinArray,true);
                 AnimateLed.BacktoFront(litTime, dimTime, pinArray);
-                AnimateLed.Sequence(litTime, dimTime, pinArray,AnimateLed.GetSequence(1,3));
+                AnimateLed.Sequence(litTime, dimTime, pinArray,Enumerable.Range(1,2));
                 AnimateLed.MidToEnd(litTime,dimTime,pinArray);
                 AnimateLed.EndToMid(litTime, dimTime, pinArray);
                 AnimateLed.MidToEnd(litTime, dimTime, pinArray);
                 AnimateLed.LightAll(litTime,dimTime,pinArray);
                 AnimateLed.DimAllAtRandom(litTime, dimTime, pinArray);
 
-                if (litTime < 25)
+                if (litTime < 20)
                 {
                     litTime = 200;
                     dimTime = 100;
                 }
                 else
                 {
-                    litTime /= 2;
-                    dimTime /= 2;
+                    litTime = (int)(litTime * 0.7);
+                    dimTime = (int)(dimTime * 0.7);
                 }
             }
         }

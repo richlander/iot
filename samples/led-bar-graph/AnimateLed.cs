@@ -23,25 +23,6 @@ public class AnimateLed
         Thread.Sleep(dimTime);
     }
 
-    public static IEnumerable<int> GetSequence(int start, int end)
-    {
-        if (start < end)
-        {
-            for (var i = start; i <= end; i++)
-            {
-                yield return i;
-            }
-        }
-        else if (start > end)
-        {
-            for (var i = start; i >= end; i--)
-            {
-                yield return i;
-            }
-        }
-        yield break;
-    }
-
     public static void Sequence(int litTime, int dimTime, GpioPin[] pins, IEnumerable<int> leds)
     {
         foreach (var led in leds)
@@ -118,7 +99,7 @@ public class AnimateLed
     {
         var random = new Random();
 
-        var ledList = GetSequence(0, 9).ToList();
+        var ledList = Enumerable.Range(0,10).ToList();
 
         while (ledList.Count > 0)
         {
