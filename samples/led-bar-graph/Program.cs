@@ -26,13 +26,14 @@ namespace led_bar_graph
 
             while (true)
             {
-                AnimateLed.FrontToBack(litTime,dimTime,pinArray);
+                AnimateLed.FrontToBack(litTime,dimTime,pinArray,true);
                 AnimateLed.BacktoFront(litTime, dimTime, pinArray);
                 AnimateLed.MidToEnd(litTime,dimTime,pinArray);
+                AnimateLed.EndToMid(litTime, dimTime, pinArray);
                 
-                if (litTime == 25)
+                if (litTime < 5)
                 {
-                    litTime = 400;
+                    litTime = 200;
                     dimTime = 100;
                 }
                 else
