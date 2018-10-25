@@ -15,7 +15,7 @@ public class AnimateLed
         }
         Thread.Sleep(litTime);
 
-        // light time
+        // dim time
         foreach (var led in leds)
         {
             pins[led].Write(PinValue.Low);
