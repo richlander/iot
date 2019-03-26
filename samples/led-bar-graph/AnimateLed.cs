@@ -1,37 +1,38 @@
 using System;
-using System.Devices.Gpio;
+using System.Device.Gpio;
 using System.Threading;
 using System.Linq;
 using System.Collections.Generic;
 
 public class AnimateLed
 {
-    private static void CycleLeds(int litTime, int dimTime, GpioPin[] pins, params int[] leds)
+    public static GpioController Controller;
+    private static void CycleLeds(int litTime, int dimTime, params int[] leds)
     {
         // light time
         foreach (var led in leds)
         {
-            pins[led].Write(PinValue.High);
+            Controller.Write(led, PinValue.High);
         }
         Thread.Sleep(litTime);
 
         // dim time
         foreach (var led in leds)
         {
-            pins[led].Write(PinValue.Low);
+            Controller.Write(led, PinValue.Low);
         }
         Thread.Sleep(dimTime);
     }
 
-    public static void Sequence(int litTime, int dimTime, GpioPin[] pins, IEnumerable<int> leds)
+    public static void Sequence(int litTime, int dimTime, IEnumerable<int> leds)
     {
         foreach (var led in leds)
         {
-            CycleLeds(litTime, dimTime, pins, led);
+            CycleLeds(litTime, dimTime, led);
         }
     }
 
-    public static void FrontToBack(int litTime, int dimTime, GpioPin[] pins, bool skipLast = false)
+    public static void FrontToBack(int litTime, int dimTime, int[] pins, bool skipLast = false)
     {
         var iterations = pins.Length;
         if (skipLast)
@@ -41,22 +42,22 @@ public class AnimateLed
 
         for (var i = 0; i < iterations; i++)
         {
-            CycleLeds(litTime, dimTime, pins, i);
+            CycleLeds(litTime, dimTime, i);
         }
     }
-    public static void BacktoFront(int litTime, int dimTime, GpioPin[] pins, bool skipLast = false)
+    public static void BacktoFront(int litTime, int dimTime, int[] pins, bool skipLast = false)
     {
         var reverseArray = pins.Reverse().ToArray();
         FrontToBack(litTime,dimTime,reverseArray, skipLast);
     }
 
-    public static void MidToEnd(int litTime, int dimTime, GpioPin[] pins)
+    public static void MidToEnd(int litTime, int dimTime, int[] pins)
     {
         var half = pins.Length / 2;
 
         if (pins.Length % 2 == 1)
         {
-            CycleLeds(litTime, dimTime, pins, half);
+            CycleLeds(litTime, dimTime, half);
         }
 
         for (var i = 1; i < half+1; i ++)
@@ -64,11 +65,11 @@ public class AnimateLed
             var ledA= half - i;
             var ledB = half - 1 + i;
 
-            CycleLeds(litTime,dimTime,pins,ledA,ledB);
+            CycleLeds(litTime,dimTime,ledA,ledB);
         }
     }
 
-    public static void EndToMid(int litTime, int dimTime, GpioPin[] pins)
+    public static void EndToMid(int litTime, int dimTime, int[] pins)
     {
         var half = pins.Length / 2;
 
@@ -77,25 +78,25 @@ public class AnimateLed
             var ledA = i;
             var ledB = pins.Length - 1 - i;
 
-            CycleLeds(litTime, dimTime, pins, ledA, ledB);
+            CycleLeds(litTime, dimTime, ledA, ledB);
         }
 
         if (pins.Length % 2 == 1)
         {
-            CycleLeds(litTime, dimTime, pins, half);
+            CycleLeds(litTime, dimTime, half);
         }
     }
 
-    public static void LightAll(int litTime, int dimTime, GpioPin[] pins)
+    public static void LightAll(int litTime, int dimTime, int[] pins)
     {
         foreach(var pin in pins)
         {
-            pin.Write(PinValue.High);
+            Controller.Write(pin, PinValue.High);
         }
         Thread.Sleep(litTime);
     }
 
-    public static void DimAllAtRandom(int litTime, int dimTime, GpioPin[] pins)
+    public static void DimAllAtRandom(int litTime, int dimTime, int[] pins)
     {
         var random = new Random();
 
@@ -107,7 +108,7 @@ public class AnimateLed
 
             if (ledList.Remove(led))
             {
-                pins[led].Write(PinValue.Low);
+                Controller.Write(led,PinValue.Low);
                 Thread.Sleep(dimTime);
             }
         }
