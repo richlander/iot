@@ -21,24 +21,19 @@ namespace led_bar_graph
             Console.CancelKeyPress += (s, e) => 
             { 
                 e.Cancel = true;
-                foreach (var pin in pins)
-                {
-                    controller.ClosePin(pin);
-                }
             };
                       
             var litTime = 200;
             var dimTime = 50;
             AnimateLed.Controller = controller;
-
+controller.Write(6,PinValue.High);
             Console.WriteLine($"Animate! {pins.Length} pins in use.");
 
-            while (true)
+            while (AnimateLed.Cancellation.IsCancellationRequested)
             {
                 Console.WriteLine($"Lit: {litTime}ms; Dim: {dimTime}");
                 AnimateLed.FrontToBack(litTime,dimTime,pins,true);
                 AnimateLed.BacktoFront(litTime, dimTime, pins);
-                AnimateLed.Sequence(litTime, dimTime, Enumerable.Range(1,2));
                 AnimateLed.MidToEnd(litTime,dimTime,pins);
                 AnimateLed.EndToMid(litTime, dimTime, pins);
                 AnimateLed.MidToEnd(litTime, dimTime, pins);
