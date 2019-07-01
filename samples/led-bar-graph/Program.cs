@@ -20,30 +20,27 @@ namespace led_bar_graph
                 cancellationSource.Cancel();
             };
                       
-            var litTime = 200;
-            var dimTime = 50;
             Console.WriteLine($"Animate! {pins.Length} pins are initialized.");
 
             while (!cancellationSource.IsCancellationRequested)
             {
-                Console.WriteLine($"Lit: {litTime}ms; Dim: {dimTime}");
-                leds.FrontToBack(litTime,dimTime,pins,true);
-                leds.BacktoFront(litTime, dimTime, pins);
-                leds.MidToEnd(litTime,dimTime,pins);
-                leds.EndToMid(litTime, dimTime, pins);
-                leds.MidToEnd(litTime, dimTime, pins);
-                leds.LightAll(litTime,dimTime,pins);
-                leds.DimAllAtRandom(dimTime, pins);
+                Console.WriteLine($"Lit: {leds.LitTime}ms; Dim: {leds.DimTime}");
+                leds.FrontToBack(true);
+                leds.BacktoFront();
+                leds.MidToEnd();
+                leds.EndToMid();
+                leds.MidToEnd();
+                leds.LightAll();
+                leds.DimAllAtRandom();
 
-                if (litTime < 20)
+                if (leds.LitTime < 20)
                 {
-                    litTime = 200;
-                    dimTime = 100;
+                    leds.ResetTime();
                 }
                 else
                 {
-                    litTime = (int)(litTime * 0.7);
-                    dimTime = (int)(dimTime * 0.7);
+                    leds.LitTime = (int)(leds.LitTime * 0.7);
+                    leds.DimTime = (int)(leds.DimTime * 0.7);
                 }
             }
         }

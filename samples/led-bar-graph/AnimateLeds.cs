@@ -10,6 +10,11 @@ public class AnimateLeds : IDisposable
     private CancellationToken _cancellation;
     private int[] _pins;
 
+    public int LitTimeDefault = 200;
+    public int DimTimeDefault = 50;
+    public int LitTime = 200;
+    public int DimTime = 50;
+
     public AnimateLeds(int[] pins, CancellationToken token)
     {
         _controller = new GpioController();
@@ -26,7 +31,7 @@ public class AnimateLeds : IDisposable
         }
     }
 
-    private void CycleLeds(int litTime, int dimTime, params int[] pins)
+    private void CycleLeds(params int[] pins)
     {
         if (_cancellation.IsCancellationRequested)
         {
@@ -38,54 +43,56 @@ public class AnimateLeds : IDisposable
         {
             _controller.Write(pin, PinValue.High);
         }
-        Thread.Sleep(litTime);
+        Thread.Sleep(LitTime);
 
         // dim time
         foreach (var pin in pins)
         {
             _controller.Write(pin, PinValue.Low);
         }
-        Thread.Sleep(dimTime);
+        Thread.Sleep(DimTime);
     }
 
-    public void Sequence(int litTime, int dimTime, IEnumerable<int> pins)
+    public void ResetTime()
+    {
+        LitTime = LitTimeDefault;
+        DimTime = DimTimeDefault;
+    }
+
+    public void Sequence(IEnumerable<int> pins)
     {
         Console.WriteLine(nameof(Sequence));
         foreach (var pin in pins)
         {
-            CycleLeds(litTime, dimTime, pin);
+            CycleLeds(pin);
         }
     }
 
-    public void FrontToBack(int litTime, int dimTime, int[] pins, bool skipLast = false)
+    public void FrontToBack(bool skipLast = false)
     {
         Console.WriteLine(nameof(FrontToBack));
-        var iterations = pins.Length;
+        var iterations = _pins.Length;
         if (skipLast)
         {
             iterations = iterations - 2;
         }
 
-        for (var i = 0; i < iterations; i++)
-        {
-            CycleLeds(litTime, dimTime, pins[i]);
-        }
+        Sequence(_pins.AsSpan(0,iterations).ToArray());
     }
-    public void BacktoFront(int litTime, int dimTime, int[] pins, bool skipLast = false)
+    public void BacktoFront()
     {
         Console.WriteLine(nameof(BacktoFront));
-        var reverseArray = pins.Reverse().ToArray();
-        FrontToBack(litTime,dimTime,reverseArray, skipLast);
+        Sequence(_pins.Reverse().ToArray());
     }
 
-    public void MidToEnd(int litTime, int dimTime, int[] pins)
+    public void MidToEnd()
     {
         Console.WriteLine(nameof(MidToEnd));
-        var half = pins.Length / 2;
+        var half = _pins.Length / 2;
 
-        if (pins.Length % 2 == 1)
+        if (_pins.Length % 2 == 1)
         {
-            CycleLeds(litTime, dimTime, pins[half]);
+            CycleLeds(_pins[half]);
         }
 
         for (var i = 1; i < half+1; i ++)
@@ -93,33 +100,33 @@ public class AnimateLeds : IDisposable
             var ledA= half - i;
             var ledB = half - 1 + i;
 
-            CycleLeds(litTime,dimTime,pins[ledA],pins[ledB]);
+            CycleLeds(_pins[ledA],_pins[ledB]);
         }
     }
 
-    public void EndToMid(int litTime, int dimTime, int[] pins)
+    public void EndToMid()
     {
         Console.WriteLine(nameof(EndToMid));
-        var half = pins.Length / 2;
+        var half = _pins.Length / 2;
 
         for (var i = 0; i < half ; i++)
         {
             var ledA = i;
-            var ledB = pins.Length - 1 - i;
+            var ledB = _pins.Length - 1 - i;
 
-            CycleLeds(litTime, dimTime, pins[ledA], pins[ledB]);
+            CycleLeds(_pins[ledA], _pins[ledB]);
         }
 
-        if (pins.Length % 2 == 1)
+        if (_pins.Length % 2 == 1)
         {
-            CycleLeds(litTime, dimTime, pins[half]);
+            CycleLeds(_pins[half]);
         }
     }
 
-    public void LightAll(int litTime, int dimTime, int[] pins)
+    public void LightAll()
     {
         Console.WriteLine(nameof(LightAll));
-        foreach(var pin in pins)
+        foreach(var pin in _pins)
         {
             if (_cancellation.IsCancellationRequested)
             {
@@ -128,15 +135,15 @@ public class AnimateLeds : IDisposable
 
             _controller.Write(pin, PinValue.High);
         }
-        Thread.Sleep(litTime);
+        Thread.Sleep(LitTime);
     }
 
-    public void DimAllAtRandom(int dimTime, int[] pins)
+    public void DimAllAtRandom()
     {
         Console.WriteLine(nameof(DimAllAtRandom));
         var random = new Random();
 
-        var ledList = Enumerable.Range(0,pins.Length).ToList();
+        var ledList = Enumerable.Range(0,_pins.Length).ToList();
 
         while (ledList.Count > 0)
         {
@@ -145,12 +152,12 @@ public class AnimateLeds : IDisposable
                 return;
             }
 
-            var led = random.Next(pins.Length);
+            var led = random.Next(_pins[_pins.Length-1]);
 
             if (ledList.Remove(led))
             {
-                _controller.Write(pins[led],PinValue.Low);
-                Thread.Sleep(dimTime);
+                _controller.Write(_pins[led],PinValue.Low);
+                Thread.Sleep(DimTime);
             }
         }
 
