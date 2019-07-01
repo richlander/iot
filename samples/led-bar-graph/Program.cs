@@ -12,11 +12,8 @@ namespace led_bar_graph
             Console.WriteLine("Hello World!");
 
             var pins = new int[] {4,5,6,12,13,16,17,18,19,20};
-            using var controller = new GpioController();
-            var leds = new AnimateLeds(controller);
             var cancellationSource = new CancellationTokenSource();
-            leds.Cancellation = cancellationSource.Token;
-            leds.Init(pins);
+            using var leds = new AnimateLeds(pins, cancellationSource.Token);
             Console.CancelKeyPress += (s, e) => 
             { 
                 e.Cancel = true;
@@ -27,7 +24,7 @@ namespace led_bar_graph
             var dimTime = 50;
             Console.WriteLine($"Animate! {pins.Length} pins are initialized.");
 
-            while (!leds.Cancellation.IsCancellationRequested)
+            while (!cancellationSource.IsCancellationRequested)
             {
                 Console.WriteLine($"Lit: {litTime}ms; Dim: {dimTime}");
                 leds.FrontToBack(litTime,dimTime,pins,true);

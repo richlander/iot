@@ -4,19 +4,23 @@ using System.Threading;
 using System.Linq;
 using System.Collections.Generic;
 
-public class AnimateLeds
+public class AnimateLeds : IDisposable
 {
     private GpioController _controller;
-    public CancellationToken Cancellation;
+    private CancellationToken _cancellation;
+    private int[] _pins;
 
-    public AnimateLeds(GpioController controller)
+    public AnimateLeds(int[] pins, CancellationToken token)
     {
-        _controller = controller;
+        _controller = new GpioController();
+        _pins = pins;
+        _cancellation = token;
+        Init();
     }
 
-    public void Init(int[] pins)
+    private void Init()
     {
-        foreach (var pin in pins)
+        foreach (var pin in _pins)
         {
             _controller.OpenPin(pin, PinMode.Output);
         }
@@ -24,7 +28,7 @@ public class AnimateLeds
 
     private void CycleLeds(int litTime, int dimTime, params int[] pins)
     {
-        if (Cancellation.IsCancellationRequested)
+        if (_cancellation.IsCancellationRequested)
         {
             return;
         }
@@ -35,11 +39,6 @@ public class AnimateLeds
             _controller.Write(pin, PinValue.High);
         }
         Thread.Sleep(litTime);
-
-        if (Cancellation.IsCancellationRequested)
-        {
-            return;
-        }
 
         // dim time
         foreach (var pin in pins)
@@ -122,7 +121,7 @@ public class AnimateLeds
         Console.WriteLine(nameof(LightAll));
         foreach(var pin in pins)
         {
-            if (Cancellation.IsCancellationRequested)
+            if (_cancellation.IsCancellationRequested)
             {
                 return;
             }
@@ -141,7 +140,7 @@ public class AnimateLeds
 
         while (ledList.Count > 0)
         {
-            if (Cancellation.IsCancellationRequested)
+            if (_cancellation.IsCancellationRequested)
             {
                 return;
             }
@@ -157,4 +156,8 @@ public class AnimateLeds
 
     }
 
+    public void Dispose()
+    {
+        _controller.Dispose();
+    }
 }
