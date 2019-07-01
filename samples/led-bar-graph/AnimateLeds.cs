@@ -71,12 +71,7 @@ public class AnimateLeds : IDisposable
     public void FrontToBack(bool skipLast = false)
     {
         Console.WriteLine(nameof(FrontToBack));
-        var iterations = _pins.Length;
-        if (skipLast)
-        {
-            iterations = iterations - 2;
-        }
-
+        var iterations = skipLast ? _pins.Length : _pins.Length - 2;
         Sequence(_pins.AsSpan(0,iterations).ToArray());
     }
     public void BacktoFront()
