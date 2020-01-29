@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Device.Gpio;
 using System.Threading;
-using System.Linq;
 
 namespace led_bar_graph
 {
