@@ -20,15 +20,11 @@ public class AnimateLeds : IDisposable
         _controller = new GpioController();
         _pins = pins;
         _cancellation = token;
-        Init();
-    }
-
-    private void Init()
-    {
+        
         foreach (var pin in _pins)
         {
             _controller.OpenPin(pin, PinMode.Output);
-        }
+        }    
     }
 
     private void CycleLeds(params int[] pins)
