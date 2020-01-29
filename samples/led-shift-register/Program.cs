@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Device.Gpio;
 using System.Threading;
+using System.Linq;
 
 namespace led_shift_register
 {
     class Program
     {
+
+        //code ported from http://www.csharp.nl/2015/06/14/driving-leds-using-a-74hc595-shift-resistor-circuit/
 
         private static GpioController _controller;
         private static int PinRCLK = 18;
@@ -36,6 +39,27 @@ namespace led_shift_register
             {
                 // flow the leds
                 foreach (var led in LED)
+                {
+                    SIPO(led);
+                    PulseRCLK();
+                    Thread.Sleep(50);
+                }
+
+                // make the leds flash
+                for (var i = 0; i < 3; i++)
+{
+                    SIPO(0xff);
+                    PulseRCLK();
+                    Thread.Sleep(100);
+                    SIPO(0x00);
+                    PulseRCLK();
+                    Thread.Sleep(100);
+                }
+
+                Thread.Sleep(500);
+
+                // flow the leds in reverse order
+                foreach (var led in LED.Reverse())
                 {
                     SIPO(led);
                     PulseRCLK();
