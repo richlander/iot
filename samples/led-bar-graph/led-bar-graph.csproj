@@ -2,14 +2,13 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <LangVersion>preview</LangVersion>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <SelfContained>false</SelfContained>
     <RuntimeIdentifier>linux-arm</RuntimeIdentifier>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Device.Gpio" Version="0.1.0-prerelease.19171.3" />
+    <PackageReference Include="System.Device.Gpio" Version="1.0.0" />
   </ItemGroup>
 
 </Project>
