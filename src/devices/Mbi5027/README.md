@@ -1,6 +1,6 @@
 # MBI5027 -- 16-bit shift register with error detection
 
-[MBI5027](http://archive.fairchip.com/pdf/MACROBLOCK/MBI5027.pdf) is a 16-bit shift register. Per the datasheet, the MBI5027 is a "16-bit Constant Current LED Sink Driver with Open/Short Circuit Detection". The [`Mbi5027` binding](Mbi5027.cs) is based on and is compatible with the more general [`ShiftRegister`](../ShiftRegister/README.md) binding. The `Mbi5027` binding adds error detection functionality. Either binding can be used to control the MBI5027.
+[MBI5027](http://archive.fairchip.com/pdf/MACROBLOCK/MBI5027.pdf) is a 16-bit shift register. Per the [MBI5027 datasheet](http://archive.fairchip.com/pdf/MACROBLOCK/MBI5027.pdf), it is a "16-bit Constant Current LED Sink Driver with Open/Short Circuit Detection". The [`Mbi5027` binding](Mbi5027.cs) is based on and is compatible with the more general [`ShiftRegister`](../ShiftRegister/README.md) binding. The `Mbi5027` binding adds error detection functionality. Either binding can be used to control the MBI5027.
 
 ![MBI5027](https://user-images.githubusercontent.com/2608468/89208974-4216cd00-d572-11ea-98eb-14a9a9b4614f.png)
 

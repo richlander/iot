@@ -1,6 +1,6 @@
 # SN74HC595 -- 8-bit shift register
 
-[SN74HC595](https://www.ti.com/lit/ds/symlink/sn74hc595.pdf) is a 8-bit shift register. Per the datasheet, the SN74HC595 is a "8-Bit Shift Register With 3-State Output Register". The [`Sn74hc595` binding](Sn74hc595.cs) is based on and is compatible with the more general [`ShiftRegister`](../ShiftRegister/README.md) binding. The `Sn74hc595` binding adds the ability clear the storage register with a single pin. Either binding can be used to control the SN74HC595.
+The [SN74HC595](https://www.ti.com/lit/ds/symlink/sn74hc595.pdf) is a 8-bit shift register. Per the [SN74HC595 datasheet](https://www.ti.com/lit/ds/symlink/sn74hc595.pdf), it is a "8-Bit Shift Register With 3-State Output Register". The [`Sn74hc595` binding](Sn74hc595.cs) is based on and is compatible with the more general [`ShiftRegister`](../ShiftRegister/README.md) binding. The `Sn74hc595` binding adds the ability clear the storage register with a single pin. Either binding can be used to control the SN74HC595.
 
 ![shift-register](https://user-images.githubusercontent.com/2608468/84733283-ac3bca00-af52-11ea-8520-67c91a45c0f0.png)
 
@@ -22,14 +22,18 @@ sr.ShiftBit(0);
 sr.ShiftBit(1);
 sr.Latch();
 
-// Clear register
+// Display for 1s
+Thread.Sleep(1000);
+
+// Clear storage register -- to all zeros
 sr.ClearStorage();
 
 // Write to all 8 registers with a byte value
+// ShiftByte latches data by default
 sr.ShiftByte(0b_1010_1010); //same as integer 170
 ```
 
-The following diagram demonstrates the required wiring.
+The following diagram demonstrates the required wiring, using an [LED bar graph](https://www.adafruit.com/product/1815). Individual LEDs will also work.
 
 ![shift-register](sn74hc595-led-bar-graph_bb.png)
 
