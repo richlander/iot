@@ -5,6 +5,8 @@
 using System;
 using System.Device.Gpio;
 using System.Device.Spi;
+using System.Threading;
+using Iot.Device.Multiplexing;
 
 namespace Iot.Device.ShiftRegister
 {
@@ -12,7 +14,7 @@ namespace Iot.Device.ShiftRegister
     /// SN74HC595 8-Bit Shift Registers With 3-State Output Registers
     /// Supports SPI and GPIO control
     /// </summary>
-    public class Sn74hc595 : IDisposable
+    public class Sn74hc595 : IDisposable, IOutputSegment
     {
         // Spec: https://www.ti.com/lit/ds/symlink/sn74hc595.pdf
         // Tutorial: https://www.youtube.com/watch?v=6fVbJbNPrEU
@@ -26,6 +28,7 @@ namespace Iot.Device.ShiftRegister
         private GpioController _controller;
         private SpiDevice _spiDevice;
         private PinMapping _pinMapping;
+        private PinValue[] _outputSegments;
 
         private int _deviceCount;
 
@@ -51,6 +54,7 @@ namespace Iot.Device.ShiftRegister
             _srclk = _pinMapping.SrClk;
             _rclk = _pinMapping.RClk;
             _deviceCount = deviceCount;
+            _outputSegments = new PinValue[_deviceCount * 8];
             SetupPins();
         }
 
@@ -90,7 +94,7 @@ namespace Iot.Device.ShiftRegister
         /// Count of total bits / registers across all (daisy-chained) shift registers.
         /// Minimum is 8.
         /// </summary>
-        public int Bits => _deviceCount * 8;
+        public int Length => _deviceCount * 8;
 
         /// <summary>
         /// Reports if Sn74hc595 is controlled with SPI.
@@ -220,6 +224,74 @@ namespace Iot.Device.ShiftRegister
             }
 
             _controller.Write(_pinMapping.OE, 0);
+        }
+
+        /// <summary>
+        /// Writes a byte to a shift register.
+        /// Does not perform a latch if connected with GPIO.
+        /// </summary>
+        void IOutputSegment.Write(int output, PinValue value)
+        {
+            _outputSegments[output] = value;
+        }
+
+        /// <summary>
+        /// Writes a byte to a shift register.
+        /// Does not perform a latch if connected with GPIO.
+        /// </summary>
+        void IOutputSegment.Write(byte value, bool shiftValues)
+        {
+            if (_spiDevice is object && !shiftValues)
+            {
+                ShiftClear();
+            }
+
+            if (_spiDevice is object)
+            {
+                ShiftByte(value);
+            }
+
+            if (shiftValues && Length > 8)
+            {
+                for (int i = Length - 9; i > 8; i--)
+                {
+                    PinValue data = _outputSegments[i];
+                    _outputSegments[i + 8] = value;
+                }
+            }
+
+            for (int i = 0; i < 8; i++)
+            {
+                // 0b_1000_0000 (same as integer 128) used as input to create mask
+                // determines value of i bit in byte value
+                // logical equivalent of value[i] (which isn't supported for byte type in C#)
+                // starts left-most and ends up right-most
+                PinValue data = (0b_1000_0000 >> i) & value;
+                // writes value to storage register
+                _outputSegments[i] = value;
+            }
+        }
+
+        /// <summary>
+        /// Displays segment per the cancellation token (duration or signal).
+        /// As appropriate for a given implementation, performs a latch.
+        /// </summary>
+        void IOutputSegment.Display(CancellationToken token)
+        {
+            if (_spiDevice is object)
+            {
+                token.WaitHandle.WaitOne();
+                return;
+            }
+
+            for (int i = Length - 1; i >= 0; i--)
+            {
+                ShiftBit(_outputSegments[i]);
+            }
+
+            Latch();
+
+            token.WaitHandle.WaitOne();
         }
 
         /// <summary>

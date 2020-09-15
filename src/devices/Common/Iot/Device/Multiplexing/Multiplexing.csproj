@@ -6,13 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="*.cs" />
     <ProjectReference Include="$(MainLibraryPath)System.Device.Gpio.csproj" />
-    <ProjectReference Include="../Common/Iot/Device/Multiplexing/Multiplexing.csproj  " />
-    <Compile Include="Sn74hc595.cs" />
-  </ItemGroup>
-
-    <ItemGroup>
-    <None Remove="README.md" />
   </ItemGroup>
 
 </Project>
