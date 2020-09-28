@@ -4,6 +4,7 @@
 using System;
 using System.Threading;
 using Iot.Device.Multiplexing;
+using Iot.Device.Multiplexing.Extensions;
 
 namespace GpioOutputSegmentDriver
 {
@@ -17,11 +18,13 @@ namespace GpioOutputSegmentDriver
         /// </summary>
         public static void Main(string[] args)
         {
-            int[] pins = new int[] { 16, 20, 21 };
-
-            GpioOutputSegment segment = new GpioOutputSegment(pins);
-            var tokenSource = new CancellationTokenSource();
+            // Program ends after 1 min
+            // demonstrates one way to use cancellation tokens
+            var tokenSource = new CancellationTokenSource(new TimeSpan(0, 1, 0));
             var ct = tokenSource.Token;
+
+            int[] pins = new int[] { 16, 20, 21 };
+            GpioOutputSegment segment = new GpioOutputSegment(pins);
 
             Console.CancelKeyPress += (s, e) =>
             {

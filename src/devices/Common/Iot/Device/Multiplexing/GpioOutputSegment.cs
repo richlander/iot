@@ -6,6 +6,7 @@ using System;
 using System.Device.Gpio;
 using System.Diagnostics;
 using System.Threading;
+using Iot.Device.Multiplexing.Extensions;
 
 namespace Iot.Device.Multiplexing
 {
@@ -44,9 +45,9 @@ namespace Iot.Device.Multiplexing
         /// <summary>
         /// Writes a PinValue to the underlying GpioController.
         /// </summary>
-        public void Write(int pin, PinValue value, CancellationToken token = default(CancellationToken), int duration = -1)
+        public void Write(int output, PinValue value, CancellationToken token = default(CancellationToken), int duration = -1)
         {
-            _controller.Write(_pins[pin], value);
+            _controller.Write(_pins[output], value);
 
             if (duration > -1)
             {
@@ -64,16 +65,14 @@ namespace Iot.Device.Multiplexing
                 throw new Exception($"{nameof(Write)}: At least 8 pins must be used to write a byte value.");
             }
 
-            int index = 0;
-            while (index < 8 && !token.IsCancellationRequested)
+            for (int i = 0; i < 8; i++)
             {
                 // 0b_1000_0000 (same as integer 128) used as input to create mask
                 // determines value of i bit in byte value
                 // logical equivalent of value[i] (which isn't supported for byte type in C#)
                 // starts left-most and ends up right-most
-                PinValue state = (0b_1000_0000 >> index) & value;
-                Write(index, state);
-                index++;
+                PinValue pinValue = (0b_1000_0000 >> i) & value;
+                Write(i, pinValue);
             }
 
             if (duration > -1)
@@ -88,18 +87,7 @@ namespace Iot.Device.Multiplexing
         /// </summary>
         public void Display(CancellationToken token = default(CancellationToken), int duration = -1)
         {
-            if (duration > -1)
-            {
-                CancellationTokenSource linkedTokens = CancellationTokenSource.CreateLinkedTokenSource(token, new CancellationTokenSource(duration).Token);
-                linkedTokens.Token.WaitHandle.WaitOne();
-                return;
-            }
-            else if (token == default(CancellationToken))
-            {
-                return;
-            }
-
-            token.WaitHandle.WaitOne();
+            WaitOnTokenOrDuration(token, duration);
         }
 
         /// <summary>
@@ -112,6 +100,26 @@ namespace Iot.Device.Multiplexing
                 _controller?.Dispose();
                 _controller = null;
             }
+        }
+
+        /// <summary>
+        /// Wait on CancellationToken or duration IOutputSegment.
+        /// Utility method intended to be called from the Display method of the IOutputSegment interface.
+        /// </summary>
+        public static void WaitOnTokenOrDuration(CancellationToken token = default(CancellationToken), int duration = -1)
+        {
+            if (duration > -1)
+            {
+                CancellationTokenSource linkedTokens = CancellationTokenSource.CreateLinkedTokenSource(token, new CancellationTokenSource(duration).Token);
+                linkedTokens.Token.WaitHandle.WaitOne();
+                return;
+            }
+            else if (token == default(CancellationToken))
+            {
+                return;
+            }
+
+            token.WaitHandle.WaitOne();
         }
     }
 }
