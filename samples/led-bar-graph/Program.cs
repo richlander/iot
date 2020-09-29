@@ -49,7 +49,7 @@ namespace led_bar_graph
             Console.WriteLine("Clear");
             for(int i = 0; i < segment.Length; i++)
             {
-                segment.Write(0,1,token,0);
+                segment.Write(i,0,token,0);
             }
 
 /*
