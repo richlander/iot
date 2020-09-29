@@ -1,5 +1,4 @@
 using System;
-using System.Device.Gpio;
 using System.Threading;
 using System.Linq;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ namespace led_bar_graph
     public class AnimateLeds
     {
         private CancellationToken _cancellation;
-        private IOutputSegment _pinSegment;
+        private IOutputSegment _segment;
         private int[] _pins;
         private int[] _pinsReverse;
         public int LitTimeDefault = 200;
@@ -18,11 +17,11 @@ namespace led_bar_graph
         public int LitTime = 200;
         public int DimTime = 50;
 
-        public AnimateLeds(IOutputSegment pinSegment, CancellationToken token)
+        public AnimateLeds(IOutputSegment outputSegment, CancellationToken token)
         {        
-            _pinSegment = pinSegment;
+            _segment = outputSegment;
             _cancellation = token;
-            _pins = Enumerable.Range(0,_pinSegment.Length).ToArray();
+            _pins = Enumerable.Range(0,_segment.Length).ToArray();
             _pinsReverse = _pins.Reverse().ToArray();
         }
 
@@ -34,18 +33,22 @@ namespace led_bar_graph
             }
 
             // light time
-            foreach (var pin in pins)
+            int index = 0;
+            while (index < _pins.Length && !_cancellation.IsCancellationRequested)
             {
-                _pinSegment.Write(pin, 1);
+                _segment.Write(index, 1);
+                index++;
             }
-            Thread.Sleep(litTime);
+            
+            _segment.Display(_cancellation, litTime);
+            index = 0;
 
             // dim time
-            foreach (var pin in pins)
+            while (index < _pins.Length && !_cancellation.IsCancellationRequested)
             {
-                _pinSegment.Write(pin, 0);
+                _segment.Write(index, 0);
             }
-            Thread.Sleep(dimTime);
+            _segment.Display(_cancellation, litTime);
         }
 
         private void CycleLeds(params int[] pins)
@@ -72,7 +75,7 @@ namespace led_bar_graph
         public void FrontToBack(bool skipLast = false)
         {
             Console.WriteLine(nameof(FrontToBack));
-            var iterations = skipLast ? _pinSegment.Length : _pinSegment.Length - 2;
+            var iterations = skipLast ? _segment.Length : _segment.Length - 2;
             Sequence(_pins.AsSpan(0,iterations).ToArray());
         }
         public void BacktoFront()
@@ -84,9 +87,9 @@ namespace led_bar_graph
         public void MidToEnd()
         {
             Console.WriteLine(nameof(MidToEnd));
-            var half = _pinSegment.Length / 2;
+            var half = _segment.Length / 2;
 
-            if (_pinSegment.Length % 2 == 1)
+            if (_segment.Length % 2 == 1)
             {
                 CycleLeds(half);
             }
@@ -103,17 +106,17 @@ namespace led_bar_graph
         public void EndToMid()
         {
             Console.WriteLine(nameof(EndToMid));
-            var half = _pinSegment.Length / 2;
+            var half = _segment.Length / 2;
 
             for (var i = 0; i < half ; i++)
             {
                 var ledA = i;
-                var ledB = _pinSegment.Length - 1 - i;
+                var ledB = _segment.Length - 1 - i;
 
                 CycleLeds(ledA, ledB);
             }
 
-            if (_pinSegment.Length % 2 == 1)
+            if (_segment.Length % 2 == 1)
             {
                 CycleLeds(half);
             }
@@ -122,15 +125,13 @@ namespace led_bar_graph
         public void LightAll()
         {
             Console.WriteLine(nameof(LightAll));
-            foreach(var pin in _pins)
+            int index = 0;
+            while (index < _pins.Length && !_cancellation.IsCancellationRequested)
             {
-                if (_cancellation.IsCancellationRequested)
-                {
-                    return;
-                }
-                _pinSegment.Write(pin, 1);
+                _segment.Write(index, 1);
+                index++;
             }
-            Thread.Sleep(LitTime);
+            _segment.Display(_cancellation,LitTime);
         }
 
         public void DimAllAtRandom()
@@ -139,8 +140,8 @@ namespace led_bar_graph
 
             foreach (var pin in SelectRandomPins(_pins.Length))
             {
-                _pinSegment.Write(pin, 0);
-                Thread.Sleep(DimTime);
+                _segment.Write(pin, 0);
+                _segment.Display(_cancellation, DimTime);
                 
                 if (_cancellation.IsCancellationRequested)
                 {
@@ -177,7 +178,7 @@ namespace led_bar_graph
                     }
                 }
             
-                var pin = random.Next(_pinSegment.Length);
+                var pin = random.Next(_segment.Length);
 
                 if (pinList.Remove(pin))
                 {

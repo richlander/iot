@@ -31,15 +31,15 @@ namespace led_bar_graph
             //using var gpioArray = new GpioSegment(pins);
             var cancellationSource = new CancellationTokenSource();
             //var leds = new AnimateLeds(gpioArray, cancellationSource.Token);
-            var shiftRegister = new ShiftRegister(ShiftRegisterPinMapping.Minimal, 8);
-            var leds = new AnimateLeds(shiftRegister, cancellationSource.Token);
+            var outputSegment = new ShiftRegister(ShiftRegisterPinMapping.Minimal, 8);
+            var leds = new AnimateLeds(outputSegment, cancellationSource.Token);
             Console.CancelKeyPress += (s, e) => 
             { 
                 e.Cancel = true;
                 cancellationSource.Cancel();
             };
                       
-            //Console.WriteLine($"Animate! {pins.Length} pins are initialized.");
+            Console.WriteLine($"Animate! {outputSegment.Length} pins are initialized.");
             
             while (!cancellationSource.IsCancellationRequested)
             {
