@@ -27,11 +27,6 @@ namespace led_bar_graph
 
         private void CycleLeds(IEnumerable<int> pins, int litTime, int dimTime)
         {
-            if (_cancellation.IsCancellationRequested)
-            {
-                return;
-            }
-
             // light time
             int index = 0;
             while (index < _pins.Length && !_cancellation.IsCancellationRequested)
@@ -39,16 +34,15 @@ namespace led_bar_graph
                 _segment.Write(index, 1);
                 index++;
             }
-            
             _segment.Display(_cancellation, litTime);
-            index = 0;
 
             // dim time
+            index = 0;
             while (index < _pins.Length && !_cancellation.IsCancellationRequested)
             {
                 _segment.Write(index, 0);
             }
-            _segment.Display(_cancellation, litTime);
+            _segment.Display(_cancellation, dimTime);
         }
 
         private void CycleLeds(params int[] pins)
