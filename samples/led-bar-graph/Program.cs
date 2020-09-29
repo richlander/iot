@@ -58,6 +58,9 @@ namespace led_bar_graph
             Console.WriteLine($"{nameof(leds.DimAllAtRandom)}");
             leds.DimAllAtRandom();
 
+            Console.WriteLine($"{nameof(leds.FrontToBack)}");
+            leds.FrontToBack(true);
+
 
 
 /*
