@@ -58,6 +58,24 @@ namespace led_bar_graph
             Console.WriteLine($"{nameof(leds.DimAllAtRandom)}");
             leds.DimAllAtRandom();
 
+            int index = 0;
+            while (index < segment.Length && !token.IsCancellationRequested)
+            {
+                segment.Write(index, 1);
+                index++;
+            }
+
+            Thread.Sleep(250);
+
+            index = 0;
+            while (index < segment.Length && !token.IsCancellationRequested)
+            {
+                segment.Write(index, 0);
+                index++;
+            }
+
+            Thread.Sleep(250);
+
             Console.WriteLine($"{nameof(leds.FrontToBack)}");
             leds.FrontToBack(true);
 
