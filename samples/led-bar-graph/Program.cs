@@ -58,10 +58,13 @@ namespace led_bar_graph
             Console.WriteLine($"{nameof(leds.DimAllAtRandom)}");
             leds.DimAllAtRandom();
 
+            Console.WriteLine("All LEDs should be dim;");
+            Thread.Sleep(500);
+
             int index = 0;
             while (index < segment.Length && !token.IsCancellationRequested)
             {
-                segment.Write(index, 1);
+                segment.Write(index, 1, token, 0);
                 index++;
             }
 
@@ -70,7 +73,7 @@ namespace led_bar_graph
             index = 0;
             while (index < segment.Length && !token.IsCancellationRequested)
             {
-                segment.Write(index, 0);
+                segment.Write(index, 0, token, 0);
                 index++;
             }
 
