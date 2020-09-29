@@ -79,8 +79,8 @@ namespace led_bar_graph
 
             Thread.Sleep(250);
 
-            Console.WriteLine($"{nameof(leds.FrontToBack)}");
-            leds.FrontToBack(true);
+            //Console.WriteLine($"{nameof(leds.FrontToBack)}");
+            //leds.FrontToBack(true);
 
 
 
