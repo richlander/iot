@@ -30,7 +30,7 @@ namespace led_bar_graph
             var token = cancellationSource.Token;
             //using var gpioArray = new GpioSegment(pins);
             //var leds = new AnimateLeds(gpioArray, cancellationSource.Token);
-            var segment = new ShiftRegister(ShiftRegisterPinMapping.Minimal, 8);
+            IOutputSegment segment = new ShiftRegister(ShiftRegisterPinMapping.Minimal, 8);
             var leds = new AnimateLeds(segment, token);
             Console.CancelKeyPress += (s, e) => 
             { 
@@ -40,10 +40,17 @@ namespace led_bar_graph
                       
             Console.WriteLine($"Animate! {segment.Length} pins are initialized.");
 
-            segment.Write(0,1,token,1);
-            segment.Write(1,1,token,1);
-            segment.Write(2,0,token,1);
-            segment.Write(3,1,token,1);
+            int delay = 100;
+            segment.Write(0,1,token,delay);
+            segment.Write(1,1,token,delay);
+            segment.Write(2,0,token,delay);
+            segment.Write(3,1,token,delay);
+
+            Console.WriteLine("Clear");
+            for(int i = 0; i < segment.Length; i++)
+            {
+                segment.Write(0,1,token,0);
+            }
 
 /*
             while (!cancellationSource.IsCancellationRequested)
