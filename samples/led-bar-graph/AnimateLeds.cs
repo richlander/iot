@@ -27,6 +27,7 @@ namespace led_bar_graph
 
         private void CycleLeds(IEnumerable<int> pins, int litTime, int dimTime)
         {
+            Console.WriteLine(nameof(CycleLeds));
             // light time
             int index = 0;
             while (index < _pins.Length && !_cancellation.IsCancellationRequested)
@@ -62,6 +63,7 @@ namespace led_bar_graph
             Console.WriteLine(nameof(Sequence));
             foreach (var pin in pins)
             {
+                Console.WriteLine($"nameof(Sequence)-foreach");
                 CycleLeds(pin);
             }
         }
