@@ -26,10 +26,8 @@ namespace led_bar_graph
             // For two LED bar graphs, you have to use unmarked pins (to get to 20).
             // It is easier to start from pin 2 and use them in sequence.
             
-            //var pins = Enumerable.Range(2,20).ToArray();
-
-            //using var gpioArray = new GpioSegment(pins);
             var cancellationSource = new CancellationTokenSource();
+            //using var gpioArray = new GpioSegment(pins);
             //var leds = new AnimateLeds(gpioArray, cancellationSource.Token);
             var outputSegment = new ShiftRegister(ShiftRegisterPinMapping.Minimal, 8);
             var leds = new AnimateLeds(outputSegment, cancellationSource.Token);
@@ -41,6 +39,9 @@ namespace led_bar_graph
                       
             Console.WriteLine($"Animate! {outputSegment.Length} pins are initialized.");
             
+            leds.FrontToBack(true);
+
+/*
             while (!cancellationSource.IsCancellationRequested)
             {
                 Console.WriteLine($"Lit: {leds.LitTime}ms; Dim: {leds.DimTime}");
@@ -62,6 +63,7 @@ namespace led_bar_graph
                     leds.DimTime = (int)(leds.DimTime * 0.7);
                 }
             }
+*/
         }
     }
 }
