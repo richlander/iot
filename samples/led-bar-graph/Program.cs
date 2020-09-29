@@ -52,6 +52,14 @@ namespace led_bar_graph
                 segment.Write(i,0,token,0);
             }
 
+            Console.WriteLine($"{nameof(leds.LightAll)}");
+            leds.LightAll();
+
+            Console.WriteLine($"{nameof(leds.DimAllAtRandom)}");
+            leds.DimAllAtRandom();
+
+
+
 /*
             while (!cancellationSource.IsCancellationRequested)
             {
