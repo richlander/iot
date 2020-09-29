@@ -27,19 +27,23 @@ namespace led_bar_graph
             // It is easier to start from pin 2 and use them in sequence.
             
             var cancellationSource = new CancellationTokenSource();
+            var token = cancellationSource.Token;
             //using var gpioArray = new GpioSegment(pins);
             //var leds = new AnimateLeds(gpioArray, cancellationSource.Token);
-            var outputSegment = new ShiftRegister(ShiftRegisterPinMapping.Minimal, 8);
-            var leds = new AnimateLeds(outputSegment, cancellationSource.Token);
+            var segment = new ShiftRegister(ShiftRegisterPinMapping.Minimal, 8);
+            var leds = new AnimateLeds(segment, token);
             Console.CancelKeyPress += (s, e) => 
             { 
                 e.Cancel = true;
                 cancellationSource.Cancel();
             };
                       
-            Console.WriteLine($"Animate! {outputSegment.Length} pins are initialized.");
-            
-            leds.FrontToBack(true);
+            Console.WriteLine($"Animate! {segment.Length} pins are initialized.");
+
+            segment.Write(0,1,token,1);
+            segment.Write(1,1,token,1);
+            segment.Write(2,0,token,1);
+            segment.Write(3,1,token,1);
 
 /*
             while (!cancellationSource.IsCancellationRequested)
