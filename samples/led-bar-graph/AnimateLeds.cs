@@ -44,6 +44,7 @@ namespace led_bar_graph
             {
                 Console.WriteLine($"{nameof(CycleLeds)}-while2");
                 _segment.Write(index, 0);
+                index++;
             }
             _segment.Display(_cancellation, dimTime);
         }
