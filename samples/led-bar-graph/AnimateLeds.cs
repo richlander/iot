@@ -27,9 +27,6 @@ namespace led_bar_graph
 
         private void CycleLeds(params int[] leds)
         {
-
-            Console.WriteLine($"{nameof(CycleLeds)}; leds.Length: {leds.Length}");
-
             // light time
             int index = 0;
             while (index < leds.Length && !_cancellation.IsCancellationRequested)

@@ -48,8 +48,8 @@ namespace led_bar_graph
                 //leds.MidToEnd();
                 //leds.EndToMid();
                 //leds.MidToEnd();
-                leds.LightAll();
-                leds.DimAllAtRandom();
+                //leds.LightAll();
+                //leds.DimAllAtRandom();
 
                 if (leds.LitTime < 20)
                 {
