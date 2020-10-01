@@ -29,6 +29,8 @@ namespace led_bar_graph
         {
 
             var ledSegment = leds.ToArray();
+            Console.WriteLine($"{nameof(CycleLeds)}; leds.Length: {ledSegment.Length}");
+
             // light time
             int index = 0;
             while (index < ledSegment.Length && !_cancellation.IsCancellationRequested)
@@ -67,6 +69,7 @@ namespace led_bar_graph
             Console.WriteLine(nameof(Sequence));
             foreach (var pin in pins)
             {
+                Console.WriteLine($"{nameof(Sequence)}; pin: {pin}");
                 CycleLeds(pin,LitTime,DimTime);
             }
         }
