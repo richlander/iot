@@ -62,7 +62,10 @@ namespace led_bar_graph
                 }
             }
 
-            leds.DimAllAtRandom();
+            for (int i = 0; i < segment.Length; i++)
+            {
+                segment.Write(i,0, default(CancellationToken), 0);
+            }
         }
     }
 }
