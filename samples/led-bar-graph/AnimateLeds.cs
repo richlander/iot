@@ -25,7 +25,7 @@ namespace led_bar_graph
             _ledsReverse = _leds.Reverse().ToArray();
         }
 
-        private void CycleLeds(params int[] leds)
+        private void CycleLedsEach(params int[] leds)
         {
             // light leds
             int index = 0;
@@ -44,6 +44,29 @@ namespace led_bar_graph
             }
         }
 
+        private void CycleLedsAll(params int[] leds)
+        {
+            // light leds
+            int index = 0;
+            while (index < leds.Length && !_cancellation.IsCancellationRequested)
+            {
+                _segment.Write(leds[index], 1, _cancellation, 0);
+                index++;
+            }
+
+            _segment.Display(_cancellation, LitTime);
+
+            // dim leds
+            index = 0;
+            while (index < leds.Length && !_cancellation.IsCancellationRequested)
+            {
+                _segment.Write(leds[index], 0, _cancellation, 0);
+                index++;
+            }
+
+            _segment.Display(_cancellation, DimTime);
+        }
+
         public void ResetTime()
         {
             LitTime = LitTimeDefault;
@@ -55,12 +78,12 @@ namespace led_bar_graph
         {
             Console.WriteLine(nameof(FrontToBack));
             var iterations = skipLast ? _segment.Length : _segment.Length - 2;
-            CycleLeds(_leds.AsSpan(0,iterations).ToArray());
+            CycleLedsEach(_leds.AsSpan(0,iterations).ToArray());
         }
         public void BacktoFront()
         {
             Console.WriteLine(nameof(BacktoFront));
-            CycleLeds(_ledsReverse);
+            CycleLedsEach(_ledsReverse);
         }
 
         public void MidToEnd()
@@ -70,7 +93,7 @@ namespace led_bar_graph
 
             if (_segment.Length % 2 == 1)
             {
-                CycleLeds(half);
+                CycleLedsAll(half);
             }
 
             for (var i = 1; i < half+1; i ++)
@@ -78,7 +101,7 @@ namespace led_bar_graph
                 var pinA= half - i;
                 var pinB = half - 1 + i;
 
-                CycleLeds(pinA,pinB);
+                CycleLedsAll(pinA,pinB);
             }
         }
 
@@ -92,12 +115,12 @@ namespace led_bar_graph
                 var ledA = i;
                 var ledB = _segment.Length - 1 - i;
 
-                CycleLeds(ledA, ledB);
+                CycleLedsAll(ledA, ledB);
             }
 
             if (_segment.Length % 2 == 1)
             {
-                CycleLeds(half);
+                CycleLedsAll(half);
             }
         }
 

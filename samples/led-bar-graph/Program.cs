@@ -61,6 +61,8 @@ namespace led_bar_graph
                     leds.DimTime = (int)(leds.DimTime * 0.7);
                 }
             }
+
+            leds.DimAllAtRandom();
         }
     }
 }
