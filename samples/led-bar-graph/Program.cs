@@ -40,46 +40,6 @@ namespace led_bar_graph
                       
             Console.WriteLine($"Animate! {segment.Length} pins are initialized.");
 
-            int delay = 100;
-            segment.Write(0,1,token,delay);
-            segment.Write(1,1,token,delay);
-            segment.Write(2,0,token,delay);
-            segment.Write(3,1,token,delay);
-
-            Console.WriteLine("Clear");
-            for(int i = 0; i < segment.Length; i++)
-            {
-                segment.Write(i,0,token,0);
-            }
-
-            leds.LightAll();
-            leds.DimAllAtRandom();
-
-            Console.WriteLine("All LEDs should be dim;");
-            Thread.Sleep(500);
-
-            int index = 0;
-            while (index < segment.Length && !token.IsCancellationRequested)
-            {
-                segment.Write(index, 1, token, 0);
-                index++;
-            }
-
-            Thread.Sleep(250);
-
-            index = 0;
-            while (index < segment.Length && !token.IsCancellationRequested)
-            {
-                segment.Write(index, 0, token, 0);
-                index++;
-            }
-
-            Thread.Sleep(250);
-
-            leds.FrontToBack(true);
-            leds.FrontToBack(true);
-
-/*
             while (!cancellationSource.IsCancellationRequested)
             {
                 Console.WriteLine($"Lit: {leds.LitTime}ms; Dim: {leds.DimTime}");
@@ -101,7 +61,6 @@ namespace led_bar_graph
                     leds.DimTime = (int)(leds.DimTime * 0.7);
                 }
             }
-*/
         }
     }
 }
