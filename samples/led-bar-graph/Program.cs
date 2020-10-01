@@ -21,7 +21,7 @@ namespace led_bar_graph
             
             
             // This group of pins is intended for one LED bar graph
-            // var pins = new int[] {4,5,6,12,13,16,17,18,19,20};
+            var pins = new int[] {4,5,6,12,13,16,17,18,19,20};
 
             // For two LED bar graphs, you have to use unmarked pins (to get to 20).
             // It is easier to start from pin 2 and use them in sequence.
@@ -52,10 +52,7 @@ namespace led_bar_graph
                 segment.Write(i,0,token,0);
             }
 
-            Console.WriteLine($"{nameof(leds.LightAll)}");
             leds.LightAll();
-
-            Console.WriteLine($"{nameof(leds.DimAllAtRandom)}");
             leds.DimAllAtRandom();
 
             Console.WriteLine("All LEDs should be dim;");
@@ -79,10 +76,8 @@ namespace led_bar_graph
 
             Thread.Sleep(250);
 
-            //Console.WriteLine($"{nameof(leds.FrontToBack)}");
-            //leds.FrontToBack(true);
-
-
+            leds.FrontToBack(true);
+            leds.FrontToBack(true);
 
 /*
             while (!cancellationSource.IsCancellationRequested)

@@ -65,7 +65,7 @@ namespace led_bar_graph
             Console.WriteLine(nameof(Sequence));
             foreach (var pin in pins)
             {
-                CycleLeds(pin);
+                CycleLeds(pin,LitTime,DimTime);
             }
         }
 
