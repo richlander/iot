@@ -31,7 +31,7 @@ namespace led_bar_graph
             int index = 0;
             while (index < leds.Length && !_cancellation.IsCancellationRequested)
             {
-                _segment.Write(index, 1);
+                _segment.Write(leds[index], 1);
                 index++;
             }
 
@@ -41,7 +41,7 @@ namespace led_bar_graph
             index = 0;
             while (index < leds.Length && !_cancellation.IsCancellationRequested)
             {
-                _segment.Write(index, 0);
+                _segment.Write(leds[index], 0);
                 index++;
             }
 
