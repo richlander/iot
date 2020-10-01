@@ -26,10 +26,9 @@ namespace led_bar_graph
             // For two LED bar graphs, you have to use unmarked pins (to get to 20).
             // It is easier to start from pin 2 and use them in sequence.
             
-            var cancellationSource = new CancellationTokenSource();
+            var cancellationSource = new CancellationTokenSource(new TimeSpan(0, 5, 0));
             var token = cancellationSource.Token;
-            //using var gpioArray = new GpioSegment(pins);
-            //var leds = new AnimateLeds(gpioArray, cancellationSource.Token);
+            // IOutputSegment = new GpioSegment(pins);
             IOutputSegment segment = new ShiftRegister(ShiftRegisterPinMapping.Minimal, 8);
             var leds = new AnimateLeds(segment, token);
             Console.CancelKeyPress += (s, e) => 
@@ -62,6 +61,7 @@ namespace led_bar_graph
                 }
             }
 
+            // Dim all leds
             for (int i = 0; i < segment.Length; i++)
             {
                 segment.Write(i,0, default(CancellationToken), 0);
