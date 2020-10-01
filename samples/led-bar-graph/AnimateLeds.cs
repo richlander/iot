@@ -25,11 +25,13 @@ namespace led_bar_graph
             _ledsReverse = _leds.Reverse().ToArray();
         }
 
-        private void CycleLeds(IEnumerable<int> pins, int litTime, int dimTime)
+        private void CycleLeds(IEnumerable<int> leds, int litTime, int dimTime)
         {
+
+            var ledSegment = leds.ToArray();
             // light time
             int index = 0;
-            while (index < _leds.Length && !_cancellation.IsCancellationRequested)
+            while (index < ledSegment.Length && !_cancellation.IsCancellationRequested)
             {
                 _segment.Write(index, 1);
                 index++;
@@ -39,7 +41,7 @@ namespace led_bar_graph
 
             // dim time
             index = 0;
-            while (index < _leds.Length && !_cancellation.IsCancellationRequested)
+            while (index < ledSegment.Length && !_cancellation.IsCancellationRequested)
             {
                 _segment.Write(index, 0);
                 index++;
