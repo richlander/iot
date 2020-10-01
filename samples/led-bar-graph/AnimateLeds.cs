@@ -25,38 +25,31 @@ namespace led_bar_graph
             _ledsReverse = _leds.Reverse().ToArray();
         }
 
-        private void CycleLeds(IEnumerable<int> leds, int litTime, int dimTime)
+        private void CycleLeds(params int[] leds)
         {
 
-            var ledSegment = leds.ToArray();
-            Console.WriteLine($"{nameof(CycleLeds)}; leds.Length: {ledSegment.Length}");
+            Console.WriteLine($"{nameof(CycleLeds)}; leds.Length: {leds.Length}");
 
             // light time
             int index = 0;
-            while (index < ledSegment.Length && !_cancellation.IsCancellationRequested)
+            while (index < leds.Length && !_cancellation.IsCancellationRequested)
             {
                 _segment.Write(index, 1);
                 index++;
             }
 
-            _segment.Display(_cancellation, litTime);
+            _segment.Display(_cancellation, LitTime);
 
             // dim time
             index = 0;
-            while (index < ledSegment.Length && !_cancellation.IsCancellationRequested)
+            while (index < leds.Length && !_cancellation.IsCancellationRequested)
             {
                 _segment.Write(index, 0);
                 index++;
             }
 
-            _segment.Display(_cancellation, dimTime);
+            _segment.Display(_cancellation, DimTime);
         }
-
-        private void CycleLeds(params int[] pins)
-        {
-            CycleLeds(pins,LitTime,DimTime);
-        }
-
 
         public void ResetTime()
         {
@@ -64,26 +57,17 @@ namespace led_bar_graph
             DimTime = DimTimeDefault;
         }
 
-        public void Sequence(IEnumerable<int> pins)
-        {
-            Console.WriteLine(nameof(Sequence));
-            foreach (var pin in pins)
-            {
-                Console.WriteLine($"{nameof(Sequence)}; pin: {pin}");
-                CycleLeds(pin,LitTime,DimTime);
-            }
-        }
-
+        
         public void FrontToBack(bool skipLast = false)
         {
             Console.WriteLine(nameof(FrontToBack));
             var iterations = skipLast ? _segment.Length : _segment.Length - 2;
-            Sequence(_leds.AsSpan(0,iterations).ToArray());
+            CycleLeds(_leds.AsSpan(0,iterations).ToArray());
         }
         public void BacktoFront()
         {
             Console.WriteLine(nameof(BacktoFront));
-            Sequence(_ledsReverse);
+            CycleLeds(_ledsReverse);
         }
 
         public void MidToEnd()
