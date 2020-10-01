@@ -27,7 +27,7 @@ namespace led_bar_graph
 
         private void CycleLeds(params int[] leds)
         {
-            // light time
+            // light leds
             int index = 0;
             while (index < leds.Length && !_cancellation.IsCancellationRequested)
             {
@@ -35,7 +35,7 @@ namespace led_bar_graph
                 index++;
             }
 
-            // dim time
+            // dim leds
             index = 0;
             while (index < leds.Length && !_cancellation.IsCancellationRequested)
             {

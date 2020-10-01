@@ -45,11 +45,11 @@ namespace led_bar_graph
                 Console.WriteLine($"Lit: {leds.LitTime}ms; Dim: {leds.DimTime}");
                 leds.FrontToBack(true);
                 leds.BacktoFront();
-                //leds.MidToEnd();
-                //leds.EndToMid();
-                //leds.MidToEnd();
-                //leds.LightAll();
-                //leds.DimAllAtRandom();
+                leds.MidToEnd();
+                leds.EndToMid();
+                leds.MidToEnd();
+                leds.LightAll();
+                leds.DimAllAtRandom();
 
                 if (leds.LitTime < 20)
                 {
