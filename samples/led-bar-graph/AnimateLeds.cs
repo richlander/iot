@@ -31,21 +31,17 @@ namespace led_bar_graph
             int index = 0;
             while (index < leds.Length && !_cancellation.IsCancellationRequested)
             {
-                _segment.Write(leds[index], 1);
+                _segment.Write(leds[index], 1, _cancellation, LitTime);
                 index++;
             }
-
-            _segment.Display(_cancellation, LitTime);
 
             // dim time
             index = 0;
             while (index < leds.Length && !_cancellation.IsCancellationRequested)
             {
-                _segment.Write(leds[index], 0);
+                _segment.Write(leds[index], 0, _cancellation, DimTime);
                 index++;
             }
-
-            _segment.Display(_cancellation, DimTime);
         }
 
         public void ResetTime()
