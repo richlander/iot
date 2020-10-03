@@ -6,8 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-     <ProjectReference Include="../R1230cdugb.csproj" />
      <ProjectReference Include="$(MainLibraryPath)System.Device.Gpio.csproj" />
+     <ProjectReference Include="../R1230cdugb.csproj" />
   </ItemGroup>
 
 </Project>

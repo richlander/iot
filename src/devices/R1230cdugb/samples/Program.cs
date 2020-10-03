@@ -19,6 +19,9 @@ namespace BarGraphDriver
         public static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
+            ShiftRegister sr = new ShiftRegister(ShiftRegisterPinMapping.Minimal, 8);
+            R1230cdugb led = new R1230cdugb(sr);
+            led.Write(0, 1);
         }
     }
 }

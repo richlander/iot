@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "R1230cdugb", "R1230cdugb.csproj", "{FF94C53C-708F-486C-B4E6-879F514FADD0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "R1230cdugb-driver", "samples\R1230cdugb-driver.csproj", "{D6981757-EDB9-49B0-B1CC-07549B4F6746}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,17 @@ Global
 		{FF94C53C-708F-486C-B4E6-879F514FADD0}.Release|x64.Build.0 = Release|Any CPU
 		{FF94C53C-708F-486C-B4E6-879F514FADD0}.Release|x86.ActiveCfg = Release|Any CPU
 		{FF94C53C-708F-486C-B4E6-879F514FADD0}.Release|x86.Build.0 = Release|Any CPU
+		{D6981757-EDB9-49B0-B1CC-07549B4F6746}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6981757-EDB9-49B0-B1CC-07549B4F6746}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6981757-EDB9-49B0-B1CC-07549B4F6746}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D6981757-EDB9-49B0-B1CC-07549B4F6746}.Debug|x64.Build.0 = Debug|Any CPU
+		{D6981757-EDB9-49B0-B1CC-07549B4F6746}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D6981757-EDB9-49B0-B1CC-07549B4F6746}.Debug|x86.Build.0 = Debug|Any CPU
+		{D6981757-EDB9-49B0-B1CC-07549B4F6746}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6981757-EDB9-49B0-B1CC-07549B4F6746}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6981757-EDB9-49B0-B1CC-07549B4F6746}.Release|x64.ActiveCfg = Release|Any CPU
+		{D6981757-EDB9-49B0-B1CC-07549B4F6746}.Release|x64.Build.0 = Release|Any CPU
+		{D6981757-EDB9-49B0-B1CC-07549B4F6746}.Release|x86.ActiveCfg = Release|Any CPU
+		{D6981757-EDB9-49B0-B1CC-07549B4F6746}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
