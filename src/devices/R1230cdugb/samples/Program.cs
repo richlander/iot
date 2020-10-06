@@ -25,6 +25,7 @@ namespace BarGraphDriver
             R1230cdugb led = new R1230cdugb(sr);
             var delay = 500;
             led.Write(0, 1, 1, token, delay);
+            led.Display(token);
             /*
             led.Write(0, 1, 1, token, delay);
             led.Write(0, 1, 2, token, delay);
@@ -34,7 +35,6 @@ namespace BarGraphDriver
             led.Write(1, 0, 2, token, delay);
             Console.WriteLine("Done writing to LEDs");
             Thread.Sleep(1000);
-            led.Display(token);
             */
         }
     }
