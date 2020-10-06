@@ -110,7 +110,7 @@ namespace Iot.Device.Multiplexing
         }
 
         /// <summary>
-        /// Writes PinValue value to storage register.
+        /// Writes value to storage register.
         /// This will shift existing values to the next storage slot.
         /// Does not latch.
         /// Requires use of GPIO controller.
@@ -132,7 +132,7 @@ namespace Iot.Device.Multiplexing
         }
 
         /// <summary>
-        /// Shifts a byte -- 8 bits -- to the storage register.
+        /// Writes a byte -- 8 bits -- to the storage register.
         /// Assumes register bit length evenly divisible by 8.
         /// Pushes / overwrites any existing values.
         /// Latches by default.
@@ -203,7 +203,7 @@ namespace Iot.Device.Multiplexing
         public int Length => _bitLength;
 
         /// <summary>
-        /// Writes a byte to a shift register.
+        /// Writes value to a shift register.
         /// Does not perform a latch if connected with GPIO.
         /// </summary>
         public void Write(int output, PinValue value, CancellationToken token = default(CancellationToken), int duration = -1)

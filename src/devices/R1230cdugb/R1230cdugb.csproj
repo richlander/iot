@@ -3,12 +3,15 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <EnableDefaultItems>false</EnableDefaultItems>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="$(MainLibraryPath)System.Device.Gpio.csproj" />
     <ProjectReference Include="../ShiftRegister/ShiftRegister.csproj" />
     <Compile Include="R1230cdugb.cs" />
+    <Compile Include="R1230cdugbNode.cs" />
+    <Compile Include="R1230cdugbLed.cs" />
   </ItemGroup>
 
 </Project>
