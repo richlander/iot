@@ -24,7 +24,8 @@ namespace BarGraphDriver
             ShiftRegister sr = new ShiftRegister(ShiftRegisterPinMapping.Minimal, 8);
             R1230cdugb led = new R1230cdugb(sr);
             var delay = 500;
-            led.Write(0, 1, 0, token, delay);
+            led.Write(0, 1, 1, token, delay);
+            /*
             led.Write(0, 1, 1, token, delay);
             led.Write(0, 1, 2, token, delay);
             led.Write(1, 1, 2, token, delay);
@@ -34,6 +35,7 @@ namespace BarGraphDriver
             Console.WriteLine("Done writing to LEDs");
             Thread.Sleep(1000);
             led.Display(token);
+            */
         }
     }
 }
