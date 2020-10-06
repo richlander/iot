@@ -249,7 +249,7 @@ namespace Iot.Device.Multiplexing
                 // starts left-most and ends up right-most
                 PinValue data = (0b_1000_0000 >> i) & value;
                 // writes value to storage register
-                _outputSegments[i] = value;
+                _outputSegments[i] = data;
             }
 
             if (duration > -1)

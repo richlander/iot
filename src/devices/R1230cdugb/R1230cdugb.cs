@@ -135,7 +135,6 @@ namespace Iot.Device.Multiplexing
                     if (led.Value == 0)
                     {
                         Thread.Sleep(1);
-                        Console.Write("-");
                         continue;
                     }
 
@@ -149,11 +148,10 @@ namespace Iot.Device.Multiplexing
                     }
                     else if (led.Color == 1)
                     {
-                        Console.Write("+");
-                        _sr.ShiftBit(1);
-                        _sr.ShiftBit(0);
-                        _sr.Latch();
-                        // _sr.Write(green, false, token, 0);
+                        // _sr.ShiftBit(1);
+                        // _sr.ShiftBit(0);
+                        // _sr.Latch();
+                        _sr.Write(green, false, token, 0);
                     }
                     else
                     {
