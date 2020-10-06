@@ -270,7 +270,6 @@ namespace Iot.Device.Multiplexing
             }
 
             Latch();
-            Console.WriteLine($"{nameof(Display)}: waiting after latch");
             GpioOutputSegment.WaitOnTokenOrDuration(token, duration);
         }
 

@@ -19,13 +19,15 @@ namespace BarGraphDriver
         public static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
-            CancellationTokenSource cts = new CancellationTokenSource(new TimeSpan(0, 1, 0));
+            CancellationTokenSource cts = new CancellationTokenSource(new TimeSpan(0, 0, 20));
             var token = cts.Token;
             ShiftRegister sr = new ShiftRegister(ShiftRegisterPinMapping.Minimal, 8);
             R1230cdugb led = new R1230cdugb(sr);
             var delay = 500;
             led.Write(0, 1, 1, token, delay);
+            Console.WriteLine("Start display");
             led.Display(token);
+            Console.WriteLine("End display");
             /*
             led.Write(0, 1, 1, token, delay);
             led.Write(0, 1, 2, token, delay);
