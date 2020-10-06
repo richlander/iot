@@ -118,6 +118,11 @@ namespace Iot.Device.Multiplexing
                token = linkedTokens.Token;
             }
 
+            for (int i = 0; i < _leds.Length; i++)
+            {
+                Console.Write($"LED {i} Value: {_leds[i].Value}; Color: {_leds[i].Color}");
+            }
+
             while (!token.IsCancellationRequested)
             {
                 for (int i = 0; i < Length; i++)
@@ -128,33 +133,32 @@ namespace Iot.Device.Multiplexing
                     byte red = _srValues[node.RedAnode];
                     byte zero = 0;
 
-                    _controller.SetPinMode(_cc[node.Cathode], PinMode.Output);
-
                     if (led.Value == 0)
                     {
+                        Thread.Sleep(1);
+                        continue;
                     }
-                    else if (led.Color == 2)
+
+                    _controller.SetPinMode(_cc[node.Cathode], PinMode.Output);
+
+                    if (led.Color == 2)
                     {
-                        _sr.Write(red, false, token, 1);
-                        Thread.Sleep(0);
-                        _sr.Write(green, false, token, 1);
+                        _sr.Write(red, false, token, 0);
+                        _sr.Write(green, false, token, 0);
 
                     }
                     else if (led.Color == 1)
                     {
-                        _sr.Write(green, false, token, 1);
+                        _sr.Write(green, false, token, 0);
                     }
                     else
                     {
-                        _sr.Write(red, false, token, 1);
+                        _sr.Write(red, false, token, 0);
                     }
 
-                    _sr.Write(zero, false, token, 1);
+                    _sr.Write(zero, false, token, 0);
 
-                    if ((i + 1) % 4 == 0)
-                    {
-                        _controller.SetPinMode(_cc[node.Cathode], PinMode.Input);
-                    }
+                    _controller.SetPinMode(_cc[node.Cathode], PinMode.Input);
                 }
             }
         }

@@ -270,7 +270,10 @@ namespace Iot.Device.Multiplexing
             }
 
             Latch();
-            GpioOutputSegment.WaitOnTokenOrDuration(token, duration);
+            if (duration > 0)
+            {
+                GpioOutputSegment.WaitOnTokenOrDuration(token, duration);
+            }
         }
 
         /// <summary>
