@@ -124,8 +124,9 @@ namespace Iot.Device.Multiplexing
                 {
                     var node = _displayNodes[i];
                     var led = _leds[i];
-                    var green = _srValues[node.GreenAnode];
-                    var red = _srValues[node.RedAnode];
+                    byte green = _srValues[node.GreenAnode];
+                    byte red = _srValues[node.RedAnode];
+                    byte zero = 0;
 
                     _controller.SetPinMode(_cc[node.Cathode], PinMode.Output);
 
@@ -134,21 +135,20 @@ namespace Iot.Device.Multiplexing
                     }
                     else if (led.Color == 2)
                     {
-                        _sr.Write(red, false, token, duration);
+                        _sr.Write(red, false, token, 1);
                         Thread.Sleep(0);
-                        _sr.Write(green, false, token, duration);
+                        _sr.Write(green, false, token, 1);
 
                     }
                     else if (led.Color == 1)
                     {
-                        _sr.Write(green, false, token, duration);
+                        _sr.Write(green, false, token, 1);
                     }
                     else
                     {
-                        _sr.Write(red, false, token, duration);
+                        _sr.Write(red, false, token, 1);
                     }
 
-                    byte zero = 0;
                     _sr.Write(zero, false, token, 1);
 
                     if ((i + 1) % 4 == 0)
