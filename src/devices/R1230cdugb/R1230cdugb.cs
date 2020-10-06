@@ -15,7 +15,7 @@ namespace Iot.Device.Multiplexing
         // Unit: https://www.adafruit.com/product/1719
         // Unit: https://www.adafruit.com/product/1721 (w/I2C backpack)
         // Datasheet: https://cdn-shop.adafruit.com/datasheets/KWL-R1230XDUGB.pdf
-        private readonly byte[] _cc;
+        private readonly int[] _cc;
         private IOutputSegment _sr;
         private GpioController _controller;
         private R1230cdugbLed[] _leds;
@@ -28,7 +28,7 @@ namespace Iot.Device.Multiplexing
         public R1230cdugb(ShiftRegister shiftRegister, sbyte leds = 12)
         {
             _sr = shiftRegister;
-            _cc = new byte[] { 13, 19, 26 };
+            _cc = new int[] { 13, 19, 26 };
             _controller = new GpioController();
             _leds = new R1230cdugbLed[leds];
             Length = leds;
@@ -54,7 +54,7 @@ namespace Iot.Device.Multiplexing
         /// Valid values are 0 (red), 1 (green), 2 (orange)
         /// Set to 0 initally.
         /// </summary>
-        public byte Color { get; set; }
+        public int Color { get; set; }
 
         /// <summary>
         /// Write value (low or high) to LED.
@@ -69,7 +69,7 @@ namespace Iot.Device.Multiplexing
         /// Write value (low or high) to LED.
         /// Supports setting one of three colors.
         /// </summary>
-        public void Write(int led, PinValue value, byte color, CancellationToken token = default(CancellationToken), int duration = -1)
+        public void Write(int led, PinValue value, int color, CancellationToken token = default(CancellationToken), int duration = -1)
         {
             _leds[led].Value = value;
             _leds[led].Color = color;
@@ -129,7 +129,10 @@ namespace Iot.Device.Multiplexing
 
                     _controller.SetPinMode(_cc[node.Cathode], PinMode.Output);
 
-                    if (led.Color == 2)
+                    if (led.Value == 0)
+                    {
+                    }
+                    else if (led.Color == 2)
                     {
                         _sr.Write(red, false, token, duration);
                         Thread.Sleep(0);
