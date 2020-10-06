@@ -16,7 +16,7 @@ namespace Iot.Device.Multiplexing
         // Unit: https://www.adafruit.com/product/1721 (w/I2C backpack)
         // Datasheet: https://cdn-shop.adafruit.com/datasheets/KWL-R1230XDUGB.pdf
         private readonly int[] _cc;
-        private IOutputSegment _sr;
+        private ShiftRegister _sr;
         private GpioController _controller;
         private R1230cdugbLed[] _leds;
         private R1230cdugbNode[] _displayNodes;
@@ -131,7 +131,6 @@ namespace Iot.Device.Multiplexing
                     var led = _leds[i];
                     byte red = _srValues[node.RedAnode];
                     byte green = _srValues[node.GreenAnode];
-                    byte zero = 0;
 
                     if (led.Value == 0)
                     {
@@ -143,23 +142,20 @@ namespace Iot.Device.Multiplexing
 
                     if (led.Color == 2)
                     {
-                        Console.WriteLine("led.Color == 2");
                         _sr.Write(red, false, token, 0);
                         _sr.Write(green, false, token, 0);
 
                     }
                     else if (led.Color == 1)
                     {
-                        Console.WriteLine("led.Color == 1");
                         _sr.Write(green, false, token, 0);
                     }
                     else
                     {
-                        Console.WriteLine("led.Color == ??");
                         _sr.Write(red, false, token, 0);
                     }
 
-                    _sr.Write(zero, false, token, 0);
+                    _sr.ShiftClear();
 
                     _controller.SetPinMode(_cc[node.Cathode], PinMode.Input);
                 }
