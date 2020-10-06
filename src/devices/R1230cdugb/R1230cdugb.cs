@@ -149,8 +149,10 @@ namespace Iot.Device.Multiplexing
                     }
                     else if (led.Color == 1)
                     {
-                        Console.Write(green);
-                        _sr.Write(green, false, token, 0);
+                        Console.Write("+");
+                        _sr.ShiftBit(1);
+                        _sr.Latch();
+                        // _sr.Write(green, false, token, 0);
                     }
                     else
                     {
