@@ -151,6 +151,7 @@ namespace Iot.Device.Multiplexing
                     {
                         Console.Write("+");
                         _sr.ShiftBit(1);
+                        _sr.ShiftBit(0);
                         _sr.Latch();
                         // _sr.Write(green, false, token, 0);
                     }
