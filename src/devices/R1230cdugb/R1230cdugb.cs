@@ -120,7 +120,7 @@ namespace Iot.Device.Multiplexing
 
             for (int i = 0; i < _leds.Length; i++)
             {
-                Console.Write($"LED {i} Value: {_leds[i].Value}; Color: {_leds[i].Color}");
+                Console.WriteLine($"LED {i} Value: {_leds[i].Value}; Color: {_leds[i].Color}");
             }
 
             while (!token.IsCancellationRequested)
