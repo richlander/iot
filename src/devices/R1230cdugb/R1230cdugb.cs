@@ -25,7 +25,7 @@ namespace Iot.Device.Multiplexing
         /// <summary>
         /// Initialize a new R1230cdugb connected through a shift register.
         /// </summary>
-        public R1230cdugb(ShiftRegister shiftRegister, sbyte leds = 12)
+        public R1230cdugb(ShiftRegister shiftRegister, int leds = 12)
         {
             _sr = shiftRegister;
             _cc = new int[] { 13, 19, 26 };
@@ -148,7 +148,8 @@ namespace Iot.Device.Multiplexing
                         _sr.Write(red, false, token, duration);
                     }
 
-                    Thread.Sleep(1);
+                    byte zero = 0;
+                    _sr.Write(zero, false, token, 1);
 
                     if ((i + 1) % 4 == 0)
                     {
