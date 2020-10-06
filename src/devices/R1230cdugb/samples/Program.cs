@@ -23,8 +23,7 @@ namespace BarGraphDriver
             var token = cts.Token;
             ShiftRegister sr = new ShiftRegister(ShiftRegisterPinMapping.Minimal, 8);
             R1230cdugb led = new R1230cdugb(sr);
-            var delay = 500;
-            led.Write(0, 1, 1, token, delay);
+            led.Write(0, 1, 1, token, 0);
             Console.WriteLine("Start display");
             led.Display(token);
             Console.WriteLine("End display");

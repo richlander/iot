@@ -129,8 +129,8 @@ namespace Iot.Device.Multiplexing
                 {
                     var node = _displayNodes[i];
                     var led = _leds[i];
-                    byte green = _srValues[node.GreenAnode];
                     byte red = _srValues[node.RedAnode];
+                    byte green = _srValues[node.GreenAnode];
                     byte zero = 0;
 
                     if (led.Value == 0)
@@ -143,16 +143,19 @@ namespace Iot.Device.Multiplexing
 
                     if (led.Color == 2)
                     {
+                        Console.WriteLine("led.Color == 2");
                         _sr.Write(red, false, token, 0);
                         _sr.Write(green, false, token, 0);
 
                     }
                     else if (led.Color == 1)
                     {
+                        Console.WriteLine("led.Color == 1");
                         _sr.Write(green, false, token, 0);
                     }
                     else
                     {
+                        Console.WriteLine("led.Color == ??");
                         _sr.Write(red, false, token, 0);
                     }
 
