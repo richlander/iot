@@ -210,13 +210,13 @@ namespace Iot.Device.Multiplexing
             var values = new byte[14];
 
             values[1] = 0b_1;
-            values[13] = 0b_01;
-            values[2] = 0b_001;
-            values[12] = 0b_0001;
-            values[3] = 0b_0000_1;
-            values[11] = 0b_0000_01;
-            values[4] = 0b_0000_001;
-            values[10] = 0b_0000_0001;
+            values[13] = 0b_10;
+            values[2] = 0b_100;
+            values[12] = 0b_1000;
+            values[3] = 0b_10_000;
+            values[11] = 0b_100_000;
+            values[4] = 0b_1_000_000;
+            values[10] = 0b_10_000_000;
 
             return values;
         }
