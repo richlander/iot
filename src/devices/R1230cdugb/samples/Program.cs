@@ -31,6 +31,7 @@ namespace BarGraphDriver
             led.Write(2, 1, 1, token, delay);
             led.Write(3, 1, 0, token, delay);
             led.Write(1, 0, 2, token, delay);
+            Console.WriteLine("Done writing to LEDs");
             led.Display(token);
         }
     }
