@@ -234,10 +234,11 @@ namespace Iot.Device.Multiplexing
 
             if (shiftValues && Length > 8)
             {
+                Console.WriteLine("Code should not get here.");
                 for (int i = Length - 9; i > 8; i--)
                 {
                     PinValue data = _outputSegments[i];
-                    _outputSegments[i + 8] = value;
+                    _outputSegments[8 - i] = value;
                 }
             }
 
@@ -249,7 +250,7 @@ namespace Iot.Device.Multiplexing
                 // starts left-most and ends up right-most
                 PinValue data = (0b_1000_0000 >> i) & value;
                 // writes value to storage register
-                _outputSegments[i] = data;
+                _outputSegments[7 - i] = data;
             }
 
             if (duration > -1)
