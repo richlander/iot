@@ -234,7 +234,6 @@ namespace Iot.Device.Multiplexing
 
             if (shiftValues && Length > 8)
             {
-                Console.WriteLine("Code should not get here.");
                 for (int i = Length - 9; i > 8; i--)
                 {
                     PinValue data = _outputSegments[i];

@@ -90,7 +90,7 @@ namespace Iot.Device.Multiplexing
                 throw new Exception($"{nameof(Write)}: At least 8 pins must be used to write a byte value.");
             }
 
-            for (ushort i = 0; i < 8; i++)
+            for (int i = 0; i < 8; i++)
             {
                 // 0b_1000_0000 (same as integer 128) used as input to create mask
                 // determines value of i bit in byte value
@@ -134,7 +134,6 @@ namespace Iot.Device.Multiplexing
 
                     if (led.Value == 0)
                     {
-                        Thread.Sleep(1);
                         continue;
                     }
 
@@ -148,10 +147,6 @@ namespace Iot.Device.Multiplexing
                     }
                     else if (led.Color == 1)
                     {
-                        // _sr.ShiftBit(1);
-                        // _sr.ShiftBit(0);
-                        // _sr.Latch();
-                        Console.WriteLine($"led.Color == 1 -- {i} -- {green}");
                         _sr.Write(green, false, token, 0);
                     }
                     else
@@ -159,8 +154,7 @@ namespace Iot.Device.Multiplexing
                         _sr.Write(red, false, token, 0);
                     }
 
-                    _sr.ShiftClear();
-
+                    // _sr.ShiftClear();
                     _controller.SetPinMode(_cc[node.Cathode], PinMode.Input);
                 }
             }
