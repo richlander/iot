@@ -118,11 +118,6 @@ namespace Iot.Device.Multiplexing
                token = linkedTokens.Token;
             }
 
-            for (int i = 0; i < _leds.Length; i++)
-            {
-                Console.WriteLine($"LED {i} Value: {_leds[i].Value}; Color: {_leds[i].Color}");
-            }
-
             while (!token.IsCancellationRequested)
             {
                 for (int i = 0; i < Length; i++)
