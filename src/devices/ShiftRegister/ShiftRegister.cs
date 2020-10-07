@@ -241,13 +241,15 @@ namespace Iot.Device.Multiplexing
                 }
             }
 
+            int mask = 0b_1000_0000;
             for (int i = 0; i < 8; i++)
             {
                 // 0b_1000_0000 (same as integer 128) used as input to create mask
                 // determines value of i bit in byte value
                 // logical equivalent of value[i] (which isn't supported for byte type in C#)
                 // starts left-most and ends up right-most
-                PinValue data = (0b_1000_0000 >> i) & value;
+                mask = (mask >> 1);
+                PinValue data = mask & value;
                 // writes value to storage register
                 _outputSegments[7 - i] = data;
             }
