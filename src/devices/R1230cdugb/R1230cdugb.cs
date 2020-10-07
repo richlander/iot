@@ -132,10 +132,7 @@ namespace Iot.Device.Multiplexing
                         continue;
                     }
 
-                    if (i % 4 == 0)
-                    {
-                        _controller.SetPinMode(_cc[node.Cathode], PinMode.Output);
-                    }
+                    _controller.SetPinMode(_cc[node.Cathode], PinMode.Output);
 
                     if (led.Color == 2)
                     {
@@ -152,10 +149,7 @@ namespace Iot.Device.Multiplexing
                         _sr.Write(red, false, token, 0);
                     }
 
-                    if ((i + 1) % 4 == 0)
-                    {
-                        _controller.SetPinMode(_cc[node.Cathode], PinMode.Input);
-                    }
+                    _controller.SetPinMode(_cc[node.Cathode], PinMode.Input);
                 }
             }
         }

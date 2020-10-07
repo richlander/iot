@@ -248,7 +248,7 @@ namespace Iot.Device.Multiplexing
                 // determines value of i bit in byte value
                 // logical equivalent of value[i] (which isn't supported for byte type in C#)
                 // starts left-most and ends up right-most
-                mask = (mask >> 1);
+                mask = mask >> 1;
                 PinValue data = mask & value;
                 // writes value to storage register
                 _outputSegments[7 - i] = data;
