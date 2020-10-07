@@ -130,6 +130,7 @@ namespace Iot.Device.Multiplexing
                     if (led.Value == 0)
                     {
                         Thread.Sleep(1);
+                        continue;
                     }
 
                     if (i % 4 == 0)
@@ -158,7 +159,6 @@ namespace Iot.Device.Multiplexing
                     }
 
                     Thread.Sleep(1);
-
                 }
             }
         }
